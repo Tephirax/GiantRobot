@@ -9,6 +9,8 @@
     <sprite>sprites\spr_mech</sprite>
     <sprite>sprites\spr_wall</sprite>
     <sprite>sprites\spr_crate</sprite>
+    <sprite>sprites\spr_door</sprite>
+    <sprite>sprites\spr_gravbutton</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -40,7 +42,9 @@
       <object>objects\obj_mech</object>
       <object>objects\obj_wall</object>
       <object>objects\obj_crate</object>
+      <object>objects\obj_door</object>
     </objects>
+    <object>objects\obj_gravbutton</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_tutorial</room>

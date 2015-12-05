@@ -67,6 +67,36 @@ else if ( keyboard_check(ord('2')) ) {
     show_debug_message('gravity_change in compartment 1 = true');
 }
 
+// Interaction with Objects
+// Doors
+if ( keyboard_check(vk_enter) ) {
+    keyboard_clear(vk_enter);
+    var closestdoor = instance_nearest(obj_mech.x, obj_mech.y, obj_door);
+    var doordist = point_distance(obj_mech.x, obj_mech.y, closestdoor.x, closestdoor.y);
+    show_debug_message('closestdoor = ' + string(closestdoor));
+    if ( doordist &lt; 64 ) {
+        if ( !closestdoor.open ) {
+            // Open door
+            closestdoor.open = true;
+            show_debug_message('Opened closestdoor');
+        } else if ( closestdoor.open ) {
+            // Close door
+            closestdoor.open = false;
+            show_debug_message('Closed closestdoor');
+        }
+    }
+}
+
+// Grav Button
+if ( keyboard_check(vk_add) ) {
+    keyboard_clear(vk_add);
+    var closestbutton = instance_nearest(obj_mech.x, obj_mech.y, obj_gravbutton);
+    var buttondist = point_distance(obj_mech.x, obj_mech.y, closestbutton.x, closestbutton.y);
+    if ( buttondist &lt; 32 ) { 
+        closestbutton.activate = true;
+    }
+}
+
 // Non-Gravitational Inputs
 // Lateral Thrust (if no gravity)
 if ( !obj_mech.gravityActive ) {
