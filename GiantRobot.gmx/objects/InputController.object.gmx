@@ -28,6 +28,8 @@
             <string>/// Initialise variables
 for (i = 0; i &lt; GameState.numOfCompartments; i++) {
     gravity_change[i] = false;
+    vacuum_change[i] = false;
+    o2_change[i] = false;
 }
 
 input = '';
@@ -101,7 +103,8 @@ if ( keyboard_check(vk_add) ) {
 // Lateral Thrust (if no gravity)
 if ( !obj_mech.gravityActive ) {
     if ( keyboard_check(vk_left) || keyboard_check(vk_right) 
-      || keyboard_check(vk_up) || keyboard_check(vk_down) ) {
+      || keyboard_check(vk_up) || keyboard_check(vk_down)
+      || keyboard_check(ord("Q")) || keyboard_check(ord("E")) ) {
         input = 'thrusters.';
         if ( keyboard_check(vk_left) ) {
             input = input + 'l';
@@ -123,6 +126,19 @@ if ( !obj_mech.gravityActive ) {
         } else {
             input = input + ' ';
         }
+        // Rotate left
+        if ( keyboard_check(ord("Q")) ) {
+            input = input + 'q';
+        } else {
+            input = input + ' ';
+        }
+        // Rotate right
+        if ( keyboard_check(ord("E")) ) {
+            input = input + 'e';
+        } else {
+            input = input + ' ';
+        }
+        
         show_debug_message('input = ' + input);
     }
     // Idle
