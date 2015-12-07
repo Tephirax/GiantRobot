@@ -21,9 +21,6 @@
     <script>scripts\st_mech_thrust_idle.gml</script>
     <script>scripts\st_mech_thrust.gml</script>
     <script>scripts\st_mech_left.gml</script>
-    <script>scripts\st_mech_jump.gml</script>
-    <script>scripts\st_mech_hover.gml</script>
-    <script>scripts\st_mech_falling.gml</script>
     <script>scripts\st_mech_impact.gml</script>
     <script>scripts\st_mech_right.gml</script>
     <script>scripts\stateact.gml</script>
@@ -37,18 +34,21 @@
     <object>objects\GameState</object>
     <objects name="Controllers">
       <object>objects\InputController</object>
-      <object>objects\GravityController</object>
       <object>objects\ParticleController</object>
-      <object>objects\VacuumController</object>
+      <object>objects\GravityController</object>
+      <object>objects\PressureController</object>
+      <object>objects\O2Controller</object>
+      <object>objects\TemperatureController</object>
     </objects>
     <objects name="Level Objects">
+      <object>objects\par_Platform</object>
       <object>objects\par_AffectedByGravity</object>
       <object>objects\obj_mech</object>
       <object>objects\obj_wall</object>
       <object>objects\obj_crate</object>
       <object>objects\obj_door</object>
+      <object>objects\obj_gravbutton</object>
     </objects>
-    <object>objects\obj_gravbutton</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_tutorial</room>

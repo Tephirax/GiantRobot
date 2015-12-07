@@ -38,10 +38,25 @@ phy_rotation = rotation;
 
 // Gravitational Movement
 walkspeed = 0.7;
-hoverpwr = -1;
-jumppwr = -12;
-jumping = false;
-falling = false;
+canhover = false; // Has the mech used its one hover per jump yet?
+hoverpwr = -5;
+hovering = false;
+hovertimer = 0;
+hovertime = 45; 
+jumpratio = 6; // Ratio of jumptime:jumppwr for smooth jump
+jumppwr = -42;
+jumping = false; // Is mech jumping? (Actively being propelled upwards
+jumptime = 7;
+jumptimer = 0; // How many frames into a jump the mech is
+falling = false; // Is mech falling?
+falltimer = 0; // How many frames into a fall the mech is
+impactmin = 45; // Minimum number of frames of falling to count as an impact
+impacttime = 30; // Number of frames for impact recovery animation
+
+// Check for platform beneath player
+raydown = 0;
+raydownleft = 0;
+raydownright = 0;
 
 /* State Initialisation */
 show_debug_message("About to initialise mech object FSM");
@@ -90,6 +105,30 @@ event_inherited();
         <arguments>
           <argument>
             <kind>1</kind>
+            <string>/// Raytrace for platform collisions
+raydown = collision_line(x, y, x, y + 25, par_Platform, false, true);
+raydownleft = collision_line(x - 12, y, x - 12, y + 25, par_Platform, false, true);
+raydownright = collision_line(x + 6, y, x + 6, y + 25, par_Platform, false, true);
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
             <string>/// Check for input &amp; change state if required
 // Thrusters
 if ( !GameState.isPaused ) { // If the game is not paused
@@ -109,18 +148,12 @@ if ( !GameState.isPaused ) { // If the game is not paused
             // Gravitational movement
             else {
                 // Impact
-                if ( falling &amp;&amp; place_meeting(x, y, obj_wall) ) {
+                if ( falling &amp;&amp; (raydown &gt; 0 || raydownleft &gt; 0 || raydownright &gt; 0) ) {
                     statechange(st_mech_impact);
                 }
                 // Other
                 else {
-                    if ( !jumping &amp;&amp; !falling &amp;&amp; InputController.input == 'statechangejump' &amp;&amp; obj_mech._state != st_mech_jump ) {
-                        statechange(st_mech_jump);
-                    }
-                    else if ( InputController.input == 'statechangehover' &amp;&amp; obj_mech._state != st_mech_hover ) {
-                        statechange(st_mech_hover);
-                    }
-                    else if ( InputController.input == 'statechangeleft' &amp;&amp; obj_mech._state != st_mech_left ) {
+                    if ( InputController.input == 'statechangeleft' &amp;&amp; obj_mech._state != st_mech_left ) {
                         statechange(st_mech_left);
                     }
                     else if ( InputController.input == 'statechangeright' &amp;&amp; obj_mech._state != st_mech_right ) {
@@ -181,6 +214,62 @@ stateinc(); // adds to the state timer
           <argument>
             <kind>1</kind>
             <string>// Dummy collision code
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="64">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Debug: Raytrace values
+draw_text(10, 10, string(raydown));
+draw_text(10, 30, string(raydownleft));
+draw_text(10, 50, string(raydownright));
+draw_text(10, 70, "hovering = " + string(hovering));
+draw_text(10, 90, "hovertimer = " + string(hovertimer));
+draw_text(10, 110, "canhover = " + string(canhover));
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Debug: Draw raytraces
+draw_self();
+draw_line(x, y, x, y + 25);
+draw_line(x - 12, y, x - 12, y + 25);
+draw_line(x + 6, y, x + 6, y + 25);
 </string>
           </argument>
         </arguments>

@@ -28,8 +28,9 @@
             <string>/// Initialise variables
 for (i = 0; i &lt; GameState.numOfCompartments; i++) {
     gravity_change[i] = false;
-    vacuum_change[i] = false;
+    pressure_change[i] = false;
     o2_change[i] = false;
+    temperature_change[i] = false;
 }
 
 input = '';
@@ -56,125 +57,114 @@ input = '';
           <argument>
             <kind>1</kind>
             <string>/// Get inputs
-// Debug gravity controls
-
-if ( keyboard_check(ord('1')) ) {
-    keyboard_clear(ord('1'));
-    gravity_change[0] = true;
-    show_debug_message('gravity_change in compartment 0 = true');
-}
-else if ( keyboard_check(ord('2')) ) {
-    keyboard_clear(ord('2'));
-    gravity_change[1] = true;
-    show_debug_message('gravity_change in compartment 1 = true');
-}
-
-// Interaction with Objects
-// Doors
-if ( keyboard_check(vk_enter) ) {
-    keyboard_clear(vk_enter);
-    var closestdoor = instance_nearest(obj_mech.x, obj_mech.y, obj_door);
-    var doordist = point_distance(obj_mech.x, obj_mech.y, closestdoor.x, closestdoor.y);
-    show_debug_message('closestdoor = ' + string(closestdoor));
-    if ( doordist &lt; 64 ) {
-        if ( !closestdoor.open ) {
-            // Open door
-            closestdoor.open = true;
-            show_debug_message('Opened closestdoor');
-        } else if ( closestdoor.open ) {
-            // Close door
-            closestdoor.open = false;
-            show_debug_message('Closed closestdoor');
+if ( GameState.control ) { 
+    // Interaction with Objects
+    // Doors
+    if ( keyboard_check(vk_enter) ) {
+        keyboard_clear(vk_enter);
+        var closestdoor = instance_nearest(obj_mech.x, obj_mech.y, obj_door);
+        var doordist = point_distance(obj_mech.x, obj_mech.y, closestdoor.x, closestdoor.y);
+        show_debug_message('closestdoor = ' + string(closestdoor));
+        if ( doordist &lt; 64 ) {
+            if ( !closestdoor.open ) {
+                // Open door
+                closestdoor.open = true;
+                show_debug_message('Opened closestdoor');
+            } else if ( closestdoor.open ) {
+                // Close door
+                closestdoor.open = false;
+                show_debug_message('Closed closestdoor');
+            }
         }
     }
-}
 
-// Grav Button
-if ( keyboard_check(vk_add) ) {
-    keyboard_clear(vk_add);
-    var closestbutton = instance_nearest(obj_mech.x, obj_mech.y, obj_gravbutton);
-    var buttondist = point_distance(obj_mech.x, obj_mech.y, closestbutton.x, closestbutton.y);
-    if ( buttondist &lt; 32 ) { 
-        closestbutton.activate = true;
+    // Grav Button
+    if ( keyboard_check(vk_add) ) {
+        keyboard_clear(vk_add);
+        var closestbutton = instance_nearest(obj_mech.x, obj_mech.y, obj_gravbutton);
+        var buttondist = point_distance(obj_mech.x, obj_mech.y, closestbutton.x, closestbutton.y);
+        if ( buttondist &lt; 32 ) { 
+            closestbutton.activate = true;
+        }
     }
-}
 
-// Non-Gravitational Inputs
-// Lateral Thrust (if no gravity)
-if ( !obj_mech.gravityActive ) {
-    if ( keyboard_check(vk_left) || keyboard_check(vk_right) 
-      || keyboard_check(vk_up) || keyboard_check(vk_down)
-      || keyboard_check(ord("Q")) || keyboard_check(ord("E")) ) {
-        input = 'thrusters.';
-        if ( keyboard_check(vk_left) ) {
-            input = input + 'l';
-        } else {
-            input = input + ' ';
-        }
-        if ( keyboard_check(vk_right) ) {
-            input = input + 'r';
-        } else {
-            input = input + ' ';
-        }
-        if ( keyboard_check(vk_up) ) {
-            input = input + 'u';
-        } else {
-            input = input + ' ';
-        }
-        if ( keyboard_check(vk_down) ) {
-            input = input + 'd';
-        } else {
-            input = input + ' ';
-        }
-        // Rotate left
-        if ( keyboard_check(ord("Q")) ) {
-            input = input + 'q';
-        } else {
-            input = input + ' ';
-        }
-        // Rotate right
-        if ( keyboard_check(ord("E")) ) {
-            input = input + 'e';
-        } else {
-            input = input + ' ';
-        }
+    // Non-Gravitational Inputs
+    // Lateral Thrust (if no gravity)
+    if ( !obj_mech.gravityActive ) {
+        if ( keyboard_check(vk_left) || keyboard_check(vk_right) 
+          || keyboard_check(vk_up) || keyboard_check(vk_down)
+          || keyboard_check(ord("Q")) || keyboard_check(ord("E")) ) {
+            input = 'thrusters.';
+            if ( keyboard_check(vk_left) ) {
+                input = input + 'l';
+            } else {
+                input = input + ' ';
+            }
+            if ( keyboard_check(vk_right) ) {
+                input = input + 'r';
+            } else {
+                input = input + ' ';
+            }
+            if ( keyboard_check(vk_up) ) {
+                input = input + 'u';
+            } else {
+                input = input + ' ';
+            }
+            if ( keyboard_check(vk_down) ) {
+                input = input + 'd';
+            } else {
+                input = input + ' ';
+            }
+            // Rotate left
+            if ( keyboard_check(ord("Q")) ) {
+                input = input + 'q';
+            } else {
+                input = input + ' ';
+            }
+            // Rotate right
+            if ( keyboard_check(ord("E")) ) {
+                input = input + 'e';
+            } else {
+                input = input + ' ';
+            }
         
-        show_debug_message('input = ' + input);
+            show_debug_message('input = ' + input);
+        }
+        // Idle
+        else {
+            input = 'statechangethrustidle';
+        }
     }
-    // Idle
+
+    // Gravitational Inputs
+    // Walking
     else {
-        input = 'statechangethrustidle';
+        if ( !obj_mech.hovering &amp;&amp; keyboard_check(vk_space) ) {
+            // If already in mid-air, hover
+            if ( (obj_mech.jumping || obj_mech.falling) &amp;&amp; obj_mech.canhover &amp;&amp; !obj_mech.hovering ) {
+                obj_mech.jumping = false;
+                obj_mech.falling = false;
+                obj_mech.hovering = true;
+                obj_mech.hovertimer = 0;
+            }
+            // Otherwise, jump 
+            else if ( !obj_mech.jumping &amp;&amp; !obj_mech.hovering &amp;&amp; !obj_mech.falling ) {
+                keyboard_clear(vk_space);
+                obj_mech.jumping = true;
+                obj_mech.jumptimer = 0;
+                obj_mech.canhover = true;
+            }
+        }
+        else if ( keyboard_check(vk_left) ) {
+            input = 'statechangeleft';
+        } else if ( keyboard_check(vk_right) ) {
+            input = 'statechangeright';
+        } else {
+            input = 'statechangeidle';
+        }
     }
 }
 
-// Gravitational Inputs
-// Walking
-else {
-    if ( obj_mech.jumping || obj_mech.falling ) {
-        if ( keyboard_check(vk_left) ) {
-            input = 'jumpleft';
-        } else if ( keyboard_check(vk_right) ) {
-            input = 'jumpright';
-        }
-    }
-    else if ( keyboard_check(vk_space) ) {
-        // If already in mid-air, hover
-        /*if ( obj_mech.falling ) {
-            input = 'statechangehover';
-        }*/
-        // Otherwise, jump 
-        //else {
-            input = 'statechangejump';
-        //}
-    }
-    else if ( keyboard_check(vk_left) ) {
-        input = 'statechangeleft';
-    } else if ( keyboard_check(vk_right) ) {
-        input = 'statechangeright';
-    } else {
-        input = 'statechangeidle';
-    }
-}
 </string>
           </argument>
         </arguments>

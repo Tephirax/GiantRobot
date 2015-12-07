@@ -77,7 +77,9 @@ switch(argument0)
         // If gravity activated in this state, switch to falling state
         if ( gravityActive ) {
             show_debug_message('Gravity activated whilst in state st_mech_thrust');
-            statechange(st_mech_falling);
+            //falling = true;
+            //falltimer = 0;
+            statechange(st_mech_idle);
         }
         
         break;

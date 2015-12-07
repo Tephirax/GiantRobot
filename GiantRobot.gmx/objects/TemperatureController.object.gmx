@@ -3,9 +3,9 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>0</depth>
+  <depth>-50</depth>
   <persistent>0</persistent>
-  <parentName>par_Platform</parentName>
+  <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
     <event eventtype="0" enumb="0">
@@ -26,13 +26,6 @@
           <argument>
             <kind>1</kind>
             <string>/// Initialise variables
-// Current gravity effect in each compartment
-for ( i = 0; i &lt; GameState.numOfCompartments; i++ ) {
-    gravity_effect[i] = false;
-}
-
-inCompartment = -1; // Which compartment the object is in
-gravityActive = false; // Whether the object is currently acted on by gravity
 </string>
           </argument>
         </arguments>
@@ -55,45 +48,12 @@ gravityActive = false; // Whether the object is currently acted on by gravity
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// Check which compartment instance is in
-for (i = 0; i &lt; GameState.numOfCompartments; i++ ) {
-    if ( x &gt; GameState.compartmentx1[i] &amp;&amp; y &gt; GameState.compartmenty1[i] 
-      &amp;&amp; x &lt; GameState.compartmentx2[i] &amp;&amp; y &lt; GameState.compartmenty2[i] ) {
-        inCompartment = i;
-    }
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>/// Apply gravity force if instance affected by gravity
+            <string>/// Update Temperature Array
 for ( i = 0; i &lt; GameState.numOfCompartments; i++ ) {
-    // If the gravity is on in the compartment object is in...
-    if ( inCompartment == i ) {
-        if ( gravity_effect[i] ) {
-            // Apply gravity
-            physics_apply_force(x, y, 0, GravityController.gravity_force);
-            //show_debug_message("Applying pseudo-gravity force");
-            gravityActive = true;
-        } else {
-            gravityActive = false;
-        }
+    if ( InputController.temperature_change[i] ) {
+        InputController.temperature_change[i] = false;
+    
+        GameState.temperaturearray[i] = !GameState.temperaturearray[i]; 
     }
 }
 </string>
@@ -101,7 +61,7 @@ for ( i = 0; i &lt; GameState.numOfCompartments; i++ ) {
         </arguments>
       </action>
     </event>
-    <event eventtype="4" ename="obj_wall">
+    <event eventtype="8" enumb="0">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -118,16 +78,19 @@ for ( i = 0; i &lt; GameState.numOfCompartments; i++ ) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// Dummy collision event
+            <string>/// Draw O2 % text in top-left corner of each compartment
+for ( i = 0; i &lt; GameState.numOfCompartments; i++ ) {
+    draw_text(GameState.compartmentx2[i] - 50, GameState.compartmenty1[i] + 10, string(GameState.temperaturearray[i]) + "oC");
+}
 </string>
           </argument>
         </arguments>
       </action>
     </event>
   </events>
-  <PhysicsObject>-1</PhysicsObject>
+  <PhysicsObject>0</PhysicsObject>
   <PhysicsObjectSensor>0</PhysicsObjectSensor>
-  <PhysicsObjectShape>1</PhysicsObjectShape>
+  <PhysicsObjectShape>0</PhysicsObjectShape>
   <PhysicsObjectDensity>0.5</PhysicsObjectDensity>
   <PhysicsObjectRestitution>0.100000001490116</PhysicsObjectRestitution>
   <PhysicsObjectGroup>0</PhysicsObjectGroup>

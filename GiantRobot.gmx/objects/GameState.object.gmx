@@ -34,9 +34,10 @@ numOfCompartments = 3;
 
 // Create gravity, vacuum &amp; o2 arrays
 for ( i = 0; i &lt; numOfCompartments; i++ ) {
-    gravityarray[i] = false; // Gravity is off
-    vacuumarray[i] = false; // Compartment is sealed
+    gravityarray[i] = true; // Gravity is on
+    pressurearray[i] = true; // Compartment is sealed
     o2array[i] = 20; // Oxygen level starts at 20% 
+    temperaturearray[i] = 25; // Temperature starts at 25oC
 }
 
 </string>
