@@ -11,6 +11,10 @@
     <sprite>sprites\spr_crate</sprite>
     <sprite>sprites\spr_door</sprite>
     <sprite>sprites\spr_gravbutton</sprite>
+    <sprite>sprites\spr_fueltank</sprite>
+    <sprite>sprites\spr_gravsystem</sprite>
+    <sprite>sprites\spr_lifesuppsystem</sprite>
+    <sprite>sprites\spr_doorsystem</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\background0</background>
@@ -48,6 +52,8 @@
       <object>objects\obj_crate</object>
       <object>objects\obj_door</object>
       <object>objects\obj_gravbutton</object>
+      <object>objects\obj_fueltank</object>
+      <object>objects\obj_gravsystem</object>
     </objects>
   </objects>
   <rooms name="rooms">

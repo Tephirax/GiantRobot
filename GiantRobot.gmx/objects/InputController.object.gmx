@@ -57,6 +57,13 @@ input = '';
           <argument>
             <kind>1</kind>
             <string>/// Get inputs
+if (keyboard_check(ord("1"))) {
+    keyboard_clear(ord("1"));
+    if ( instance_exists(obj_fueltank) ) {
+        obj_fueltank.detonation = true;
+    }
+}
+
 if ( GameState.control ) { 
     // Interaction with Objects
     // Doors

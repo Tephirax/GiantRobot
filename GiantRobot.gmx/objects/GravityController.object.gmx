@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>50</depth>
+  <depth>-50</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -108,12 +108,38 @@ for ( i = 0; i &lt; GameState.numOfCompartments; i++ ) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// Draw coloured overlay if gravity is on
-draw_set_color(c_yellow);
-draw_set_alpha(0.1);
+            <string>/// Draw gravity text in top-right corner of each compartment
 for ( i = 0; i &lt; GameState.numOfCompartments; i++ ) {
     if ( GameState.gravityarray[i] ) {
-        draw_rectangle(GameState.compartmentx1[i], GameState.compartmenty1[i], GameState.compartmentx2[i], GameState.compartmenty2[i], 0);
+        draw_text(GameState.compartmentx2[i] - 70, GameState.compartmenty1[i] + 25, "Gravity");    
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Draw coloured overlay if gravity is on
+draw_set_color(c_yellow);
+draw_set_alpha(0.4);
+for ( i = 0; i &lt; GameState.numOfCompartments; i++ ) {
+    if ( GameState.gravityarray[i] ) {
+        //draw_rectangle(GameState.compartmentx1[i], GameState.compartmenty1[i], GameState.compartmentx2[i], GameState.compartmenty2[i], 0);
     }
 }
 draw_set_alpha(1);
