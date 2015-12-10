@@ -64,6 +64,11 @@ if (keyboard_check(ord("1"))) {
     }
 }
 
+if ( keyboard_check(ord("5")) ) {
+    keyboard_clear(ord("5"));
+    CompartmentController.floodfill = true;
+}
+
 if ( GameState.control ) { 
     // Interaction with Objects
     // Doors

@@ -63,6 +63,9 @@ if ( detonation ) {
     // TODO: Second Attempt: Destroys circle centred around fuel tank  
         
     instance_destroy();
+    
+    // Run Pressurisation Check on all compartments
+    scr_pressurecheck();
 }
 </string>
           </argument>

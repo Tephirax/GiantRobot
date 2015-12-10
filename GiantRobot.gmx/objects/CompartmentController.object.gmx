@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-50</depth>
+  <depth>-200</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -26,9 +26,46 @@
           <argument>
             <kind>1</kind>
             <string>/// Initialise variables
-temperaturelossrate = 0.01; // How much temperature lost in depressurisation
-temperaturegen = 0.005; // How much temperature stabilisation is generated per frame
-temperaturetarget = 25; // Ideal temperature value
+inCompartment = -1;
+
+compartment_cell_x = x / 32;
+compartment_cell_y = y / 32;
+
+floodfill = false;
+
+grid_h = 0;
+grid_w = 0;
+
+// Temp
+map_font = font_add_sprite(sprMapFont, ord("0"), false, 0);
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Iterate through compartments to see which object is in
+for (i = 0; i &lt; GameState.numOfCompartments; i++ ) {
+    if ( x &gt; GameState.compartmentx1[i] &amp;&amp; y &gt; GameState.compartmenty1[i] 
+      &amp;&amp; x &lt; GameState.compartmentx2[i] &amp;&amp; y &lt; GameState.compartmenty2[i] ) {
+        inCompartment = i;
+    }
+}
+
 </string>
           </argument>
         </arguments>
@@ -51,13 +88,22 @@ temperaturetarget = 25; // Ideal temperature value
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// Update Temperature Array
-for ( i = 0; i &lt; GameState.numOfCompartments; i++ ) {
-    // If depressurised, temperature drops
-    if ( !GameState.pressurearray[i] &amp;&amp; GameState.temperaturearray[i] &gt; -270 ) {
-        GameState.temperaturearray[i] -= temperaturelossrate;
+            <string>/// Start Flood Fill procedure at centre of compartment
+if ( floodfill ) {
+    show_debug_message('Initialising flood fill');
+    fill_up_init(); // TODO: Only create grid_data array once each time flood_fill is called, rather than once per compartment each time flood_fill is called
+    fill_up_step();
+    // If flood_fill hits boundary, compartment should be depressurized
+    if ( flood_hit_boundary ) {
+        GameState.pressurearray[inCompartment] = false;
+        show_debug_message('Flood fill for compartment ' + string(inCompartment) + ' found leaks.');
+    } else {
+        GameState.pressurearray[inCompartment] = true;
+        show_debug_message('Flood fill for compartment ' + string(inCompartment) + ' is secure.');
     }
+    floodfill = false;
 }
+
 </string>
           </argument>
         </arguments>
@@ -80,11 +126,13 @@ for ( i = 0; i &lt; GameState.numOfCompartments; i++ ) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// Draw O2 % text in top-left corner of each compartment
-for ( i = 0; i &lt; GameState.numOfCompartments; i++ ) {
-    var roundedstring = string(floor(GameState.temperaturearray[i]));
-    draw_text(GameState.compartmentx2[i] - 50, GameState.compartmenty1[i] + 10, roundedstring + "oC");
-}
+            <string>/// Debug display for flood fill
+
+/*draw_set_alpha(0.5);
+draw_set_font(map_font);
+fill_up_draw();
+draw_set_alpha(1);
+draw_set_font(-1);*/
 </string>
           </argument>
         </arguments>

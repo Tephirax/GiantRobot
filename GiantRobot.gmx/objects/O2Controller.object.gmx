@@ -26,6 +26,9 @@
           <argument>
             <kind>1</kind>
             <string>/// Initialise variables
+o2lossrate = 0.5; // How much o2 is lost when depressurised
+o2gen = 0.01; // How much o2 % is generated per frame
+o2target = 20; // Ideal o2 value
 </string>
           </argument>
         </arguments>
@@ -50,10 +53,12 @@
             <kind>1</kind>
             <string>/// Update O2 Array
 for ( i = 0; i &lt; GameState.numOfCompartments; i++ ) {
-    if ( InputController.o2_change[i] ) {
-        InputController.o2_change[i] = false;
-    
-        GameState.o2array[i] = !GameState.o2array[i]; 
+    // If depressurised, oxygen level drops
+    if ( !GameState.pressurearray[i] &amp;&amp; GameState.o2array[i] &gt; 0 ) {
+        GameState.o2array[i] -= o2lossrate;
+        if ( GameState.o2array[i] &lt; 0 ) {
+            GameState.o2array[i] = 0;
+        }
     }
 }
 </string>
@@ -80,7 +85,8 @@ for ( i = 0; i &lt; GameState.numOfCompartments; i++ ) {
             <kind>1</kind>
             <string>/// Draw O2 % text in top-left corner of each compartment
 for ( i = 0; i &lt; GameState.numOfCompartments; i++ ) {
-    draw_text(GameState.compartmentx1[i] + 10, GameState.compartmenty1[i] + 10, string(GameState.o2array[i]) + "%");
+    var roundedstring = string(floor(GameState.o2array[i]));
+    draw_text(GameState.compartmentx1[i] + 10, GameState.compartmenty1[i] + 10, roundedstring + "%");
 }
 </string>
           </argument>

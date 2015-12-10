@@ -50,6 +50,10 @@ image_index = 0;
             <kind>1</kind>
             <string>/// Initialise variables
 open = false;
+
+// Adjacent compartments
+compartmentl = -1; // No compartment to the left
+compartmentr = -1; // No compartment to the right
 </string>
           </argument>
         </arguments>
@@ -72,13 +76,21 @@ open = false;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>// Control door
+            <string>/// Control door
 if ( image_index == 0 &amp;&amp; open ) {
     image_index = 1;
     phy_active = false;
+    
+    // Run Pressurisation Check on all compartments
+    scr_pressurecheck();
+    
 } else if ( image_index = 1 &amp;&amp; !open ) {
     image_index = 0;
     phy_active = true;
+    
+    // Run Pressurisation Check on all compartments
+    scr_pressurecheck();
+
 }
 </string>
           </argument>

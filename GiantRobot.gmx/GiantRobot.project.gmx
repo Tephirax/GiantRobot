@@ -15,29 +15,44 @@
     <sprite>sprites\spr_gravsystem</sprite>
     <sprite>sprites\spr_lifesuppsystem</sprite>
     <sprite>sprites\spr_doorsystem</sprite>
+    <sprite>sprites\sprMapFont</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\background0</background>
   </backgrounds>
   <paths name="paths"/>
   <scripts name="scripts">
-    <script>scripts\st_mech_idle.gml</script>
-    <script>scripts\st_mech_thrust_idle.gml</script>
-    <script>scripts\st_mech_thrust.gml</script>
-    <script>scripts\st_mech_left.gml</script>
-    <script>scripts\st_mech_impact.gml</script>
-    <script>scripts\st_mech_right.gml</script>
-    <script>scripts\stateact.gml</script>
-    <script>scripts\statechange.gml</script>
-    <script>scripts\stateinc.gml</script>
-    <script>scripts\stateinit.gml</script>
-    <script>scripts\statestart.gml</script>
-    <script>scripts\statestop.gml</script>
+    <scripts name="FSM Control Scripts">
+      <script>scripts\statestart.gml</script>
+      <script>scripts\statechange.gml</script>
+      <script>scripts\statestop.gml</script>
+      <script>scripts\stateinc.gml</script>
+      <script>scripts\stateinit.gml</script>
+      <script>scripts\stateact.gml</script>
+    </scripts>
+    <scripts name="FSM Mech States">
+      <script>scripts\st_mech_idle.gml</script>
+      <script>scripts\st_mech_thrust_idle.gml</script>
+      <script>scripts\st_mech_left.gml</script>
+      <script>scripts\st_mech_thrust.gml</script>
+      <script>scripts\st_mech_impact.gml</script>
+      <script>scripts\st_mech_right.gml</script>
+    </scripts>
+    <scripts name="Flood Fill Scripts">
+      <script>scripts\fill_up_init.gml</script>
+      <script>scripts\fill_up_step.gml</script>
+      <script>scripts\fill_up_execute.gml</script>
+      <script>scripts\fill_up_flood.gml</script>
+      <script>scripts\fill_up_draw.gml</script>
+      <script>scripts\fill_up_replace_vals.gml</script>
+    </scripts>
+    <script>scripts\scr_pressurecheck.gml</script>
   </scripts>
   <objects name="objects">
     <object>objects\GameState</object>
     <objects name="Controllers">
       <object>objects\InputController</object>
+      <object>objects\CompartmentController</object>
       <object>objects\ParticleController</object>
       <object>objects\GravityController</object>
       <object>objects\PressureController</object>
@@ -54,6 +69,7 @@
       <object>objects\obj_gravbutton</object>
       <object>objects\obj_fueltank</object>
       <object>objects\obj_gravsystem</object>
+      <object>objects\obj_lifesuppsystem</object>
     </objects>
   </objects>
   <rooms name="rooms">
